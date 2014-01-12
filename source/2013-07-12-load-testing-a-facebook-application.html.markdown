@@ -31,8 +31,9 @@ JMeter got the ability to test almost everything by creating very complex scenar
 
 JMeter comes as a client/server application to easily enable distributed load testing. We can then launch tests from multiple instances properly configured to have extremely aggressive load tests.
 
-http://jmeter.apache.org
-http://jmeter.apache.org/usermanual/
+[JMeter home page](http://jmeter.apache.org)
+
+[JMeter user manual](http://jmeter.apache.org/usermanual/)
 
 ## Waves of "real" Facebook users
 
