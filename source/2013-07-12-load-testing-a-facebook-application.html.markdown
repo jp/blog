@@ -4,11 +4,12 @@ date: 2013-07-12
 tags: load testing, facebook, jmeter, ruby on rails
 ---
 
+<center>
 # Load testing a facebook application
-or
-How to destroy servers when people are working with them
+<sup>or how to destroy servers when developers are deploying</sup>
+</center>
 
-## I. Weapons of mass destruction
+## Load testing tools - Weapons of mass destruction
 
 Lot of people are using Selenium for his simplicity (record a behavior through
 a proxy and replay it on a server).
@@ -19,9 +20,8 @@ Other easy options are the use of expensive paid services or DDOS software like 
 
 Some services with free tests :
 
-● http://loadimpact.com
-
-● http://blazemeter.com
+* [loadimpact.com](http://loadimpact.com)
+* [blazemeter.com](http://blazemeter.com)
 
 Most of the test services available ends to be really expensive while DDOS tools don't fit at all to a proper test plan.
 
@@ -34,88 +34,74 @@ JMeter comes as a client/server application to easily enable distributed load te
 http://jmeter.apache.org
 http://jmeter.apache.org/usermanual/
 
-## II. Waves of Facebook users
+## Waves of "real" Facebook users
 
-JMeter can imitate most of the behaviors of a normal browser but going
-through the authentication system of Facebook in an automated way is
-against the Terms&Conditions, which is a good thing because that would
-have been painful to setup.
+JMeter can imitate most of the behaviors of a normal browser but going through the authentication system of Facebook in an automated way is against the Terms&Conditions.
 
 > You will not collect users' content or information, or otherwise access Facebook, using
 > automated means (such as harvesting bots, robots, spiders, or scrapers) without our
 > permission.
 
-But Facebook have an API to automatically create and interact with test
-users. Can we assume that automated means are allowed with the test API
-? ... Yes, but you might prefer to ask a lawyer before.
+But Facebook have an API to automatically create and interact with test users. Can we assume that automated means are allowed with the test API ? ... Probably, but you might prefer to ask your lawyer before.
 
 With this API you can :
-● create fake users which can only interact with other test users on
-this app
-● add existing test users to other apps
-● make friend connections between the test users
-● delete test users
 
-## III. The forbidden scripting of the Facebook test API
+* create fake users which can only interact with other test users on this app
+* add existing test users to other apps
+* make friend connections between the test users
+* delete test users
+
+## The forbidden scripting of the Facebook test API
 
 Then I wrote some ruby scripts to manipulate this API. [The scripts are available on my Github account](https://github.com/jp/fb-ruby-script)
 
 ### App credential
-Edit the app information with what you find in the FB dev interface for the
-app you want to load test. The scripts are made for a single app. The app
-credentials are stored in the file fb_secret.rb .
-Just edit APP_ID and APP_SECRET to make them match to what should be
-inside.
+
+Edit the app information with what you find in the FB dev interface for the app you want to load test. The scripts are made for a single app. The app credentials are stored in the file *fb_secret.rb*.
+Just edit *APP_ID* and *APP_SECRET* to make them match to what should be inside.
 
 ### Test account generator
 
-I used an account generator to create 500 test users (Facebook limit at this
-time).
-Edit fb_account_generator.rb if you want to see if facebook gives more test
-users.
-Note that RIG (Random Identity Generator) is used to generate the user
-names. Install with APT-GET or rig.sourceforge.net.
-RIG is giving some nice generated identities which is much better than
-having user001 to user500.
-Then run fb_account_generator.rb ... and wait.
-Each created account is stored in an SQLite database with a model defined in
-lib.rb.
+I used an account generator to create 500 test users (Facebook limit at this time).
+Edit *fb\_account\_generator.rb* if you want to see if facebook gives more test users.
+Note that RIG (Random Identity Generator) is used to generate the user names. Install with APT-GET or rig.sourceforge.net.
+RIG is giving some nice generated identities which is much better than having user001 to user500.
+Then run *fb\_account\_generator.rb* ... and wait.
+Each created account is stored in an SQLite database with a model defined in lib.rb.
 
 
 ### Friend randomizer
 
 We will need to test some processes involving friendships connections :
-● know if a user is a friend of another user, then give him the right to
-access certain information
-● get the list of all the user's friends who already have an account in
-the app
-For each test user, the script randomize_friends.rb creates 10 to 100
-connections with other test users.
+
+* know if a user is a friend of another user, then give him the right to access certain information
+* get the list of all the user's friends who already have an account in the app
+
+For each test user, the script randomize_friends.rb creates 10 to 100connections with other test users.
 
 ### CSV export
 
 For an easy use of those accounts with JMeter, we need to export those
-information in CSV, especially each access_token.
-The script read.rb output is formatted like this : “fb_user_id,access_token”
+information in CSV, especially each access\_token.
+The script read.rb output is formatted like this : "fb\_user\_id,access\_token"
 Just save the output of read.rb as a CSV, this will be an efficient input for
 JMeter.
 
 ### Freshen-up your data !!
 
-The *access_token* is expiring like the login_url : regularly, after a badly
+The *access_token* is expiring like the *login_url* : regularly, after a badly
 documented delay (1 or 2 hours depending on the line of the fb doc).
 We can anyway refresh the tokens using the listing of all the test users
 associated to the application. The refresh.rb script is there to do the job.
 
 ## Cheat a little – Hack your own code
 
-You probably use some clean authentication system between your app and
-Facebook using auth cookies or signed requests but this is not going to fit
-properly with JMeter :
-● JMeter can't execute JavaScript then can't get cookies from FB JS
+You probably use some clean authentication system between your app and Facebook using auth cookies or signed requests but this is not going to fit properly with JMeter :
+
+* JMeter can't execute JavaScript then can't get cookies from FB JS
 SDK
-● There is no reason to load test through Facebook canvas (forbidden
-& useless) and then to receiving the signed_request.
+* There is no reason to load test through Facebook canvas (forbidden & useless) and then to receiving the signed_request.
+
 The solution is to create another authentication system, bypassing the other
 ones, by giving the access_token as a GET parameter in the URL of each
 authenticated request during the load test.
