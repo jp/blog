@@ -113,7 +113,7 @@ This is the time to learn how to create a test plan with JMeter. See the JMeter 
 and this very complete blog post 
 [Using JMeter](http://www.roseindia.net/jmeter/using-jmeter.shtml)
 
-Now that you know almost everything about JMeter let see how to use the CSV full of tokens.
+Now that you know almost everything about JMeter from the two previous links, let see how to use the CSV full of tokens.
 
 We got a CSV file, full of fresh tokens, looking like that :
 
@@ -276,42 +276,46 @@ upload.json)
 
 ### Conclusion
 With the initial configuration, each server is handling 550rpm.
-Adding a new identical server to the load balancer will improve the capacity
-by the same amount.
+
+Adding a new identical server to the load balancer will improve the capacity by the same amount.
 
 ### Optimisation
-Multiple tests were then performed and the apache configuration was slowly
-tweaked, in particular the number of Apache processes on the server.
-In the initial test, the minumum number of apache processes was equal to
-the maximum number of apache processes, which is a good practice for
-dedicated web servers.
-This was done by setting MaxClients to 710
+Multiple tests were then performed and the apache configuration was slowly tweaked, in particular the number of Apache processes on the server.
+
+In the initial test, the minumum number of apache processes was equal to the maximum number of apache processes, which is a good practice for dedicated web servers.
+
+This was done by setting MaxClients to 710.
+
 We calculated the optimum value for this by using this calculation and then
 running a few more tests :
-MaxClients = (Memory size – other processes mem use) / single httpd
-process mem size
+
+MaxClients = (Memory size – other processes mem use) / single httpd process mem size.
+
 At the end of the tests, the optimal value for a 2GB instance was MaxClients
 = 950.
 
 ### Final test
 3 Rails servers behind load balancer = 2500rpm
+
 2 Rails servers behind load balancer = 1650rpm
 
 ### Conclusion
 The optimisation has enabled Apache to run more processes on each
 instance and therefore us to handle more requests per minute – awesome!
-Keep Alive
+
+###Keep Alive
 We also tested tweaking the KeepAlive directive. The KeepAlive directive
 allows Apache to keep open the socket between the client and the server.
-In the last test,
-KeepAlive deactivated, servers handling 2500 rpm, other users timeout most
-of the time
+
+In the last test, KeepAlive deactivated, servers handling 2500 rpm, other users timeout most
+of the time.
+
 KeepAlive activated, servers handling 2500rpm, other users working properly.
 We will now run the servers with KeepAlive activated.
 
 ## And so what ?
 
-Important points of what I learned :
+THe important points I learn during this job :
 
 * ability to repeat the exact same test as much as necessary
 * change one and only one thing between two test
