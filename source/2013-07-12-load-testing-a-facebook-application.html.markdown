@@ -103,20 +103,18 @@ You probably use some clean authentication system between your app and Facebook 
 SDK
 * There is no reason to load test through Facebook canvas (forbidden & useless) and then to receiving the signed_request.
 
-The solution is to create another authentication system, bypassing the other
-ones, by giving the access_token as a GET parameter in the URL of each
-authenticated request during the load test.
-This tweak can be a security issue as an access_token can be used by
-anyone on any app : if someone get an access\_token from another app, he
-can use it to be identified on this application.
+The solution is to create another authentication system, bypassing the other ones, by giving the access\_token as a GET parameter in the URL of each authenticated request during the load test.
+This tweak can be a security issue as an access\_token can be used by anyone on any app : if someone get an access\_token from another app, he can use it to be identified on this application.
 
 ## JMeter – Strategy of the attack
 
-This is the time to learn how to create plan with JMeter
-http://jmeter.apache.org/usermanual/build-web-test-plan.html
-http://www.roseindia.net/jmeter/using-jmeter.shtml
-Now that you know almost everything about JMeter let see how to use the
-CSV full of tokens.
+This is the time to learn how to create a test plan with JMeter. See the JMeter doc here 
+[Build test plan](http://jmeter.apache.org/usermanual/build-web-test-plan.html)
+and this very complete blog post 
+[Using JMeter](http://www.roseindia.net/jmeter/using-jmeter.shtml)
+
+Now that you know almost everything about JMeter let see how to use the CSV full of tokens.
+
 We got a CSV file, full of fresh tokens, looking like that :
 
 ```
@@ -130,18 +128,20 @@ We got a CSV file, full of fresh tokens, looking like that :
 100003803036277,AAAE1TlpWcPkBADbOFDZBZCbXQ4Ik...
 ```
 
-In JMeter, right click on the Thread Group and go to Add > Config Element >
-CSV Data Set Config.
+In JMeter, right click on the Thread Group and go to Add > Config Element > CSV Data Set Config.
 We now got the following screen to setup the use of the CSV file for each
 call in the Thread Group.
+
 We got in this screen :
-● filename : the absolute path of the CSV file that you are going to have
+
+* filename : the absolute path of the CSV file that you are going to have
 on each slave (to be explained a bit later)
-● variables names : the name of the variables which are going to hold
+* variables names : the name of the variables which are going to hold
 the content of the CSV columns (here : fbid and token)
 
 Resulting of this operation, we will have to variable set up on each HTTP
 request made by JMeter : fbid and token.
+
 At each new iteration of the test plan, the information from a new line will
 be used.
 
@@ -160,24 +160,32 @@ by a CDN.
 ## JMeter – An army of slaves
 
 The JMeter FAQ recommends :
-● the JMeter server to be reasonably close (network wise) to the
+
+> the JMeter server to be reasonably close (network wise) to the
 application server. By "reasonably close" I mean on the same Ethernet
 segment or at least with no low speed links between them. The JMeter
 User Manual provides reasonable information about doing this.
+
 The Distributed testing manual Limitation :
-● RMI cannot communicate across subnets without a proxy; therefore
+
+> RMI cannot communicate across subnets without a proxy; therefore
 neither can jmeter without a proxy.
+
 Being in New Zealand and the servers at RackSpace or AWS anywhere around
 the world does not match. No choice : we need to run JMeter from the same
 type of cloud instance.
+
 The FAQ also say that we shouldn't run JMeter on the target server, idea
 which is obviously bad... especially after seeing the JMeter server swapping
 after few minutes of test.
+
 If this is quite easy to have a distant (any cloud server) JMeter slave
 managed by a Master GUI in local (Resn network) through a SSH tunnel, it
 starts to be complicated to have more than one slaves.
+
 I considered running fully master and slaves on RackSpace network after
 struggling a while.
+
 In consequence of the firsts tries, we raised 1 master and 3 slaves, Ubuntu
 servers - 1Gb of mem, on RackSpace Network to stress 3 load-balanced rails
 servers, Centos - 2Gb of Mem.
@@ -194,13 +202,17 @@ For each slave's IP on the master and for the master's IP on each slave :
 iptables -A INPUT -i <iface> -s <IP> -j ACCEPT
 ```
 
-On RackSpace, iface was eth1 and the IPs were the eth1 IP of the
-slaves&master
+On RackSpace, iface was eth1 and the IPs were the eth1 IP of the slaves&master
+
 Then we need to setup JMeter server properly because of the use of multiple
 network interfaces in RackSpace instances.
-Edit /usr/share/jmeter/bin/jmeter.properties and add :
+
+Edit `/usr/share/jmeter/bin/jmeter.properties` and add :
+
+```
 server.rmi.localhostname=<eth1 IP> # internal iface
 httpclient.localaddress=<eth0 IP> # external iface
+```
 
 Then we need to upload the CSV full of fresh token on each JMeter server.
 This have to be done each time the tokens starts expiring ... which is quite
