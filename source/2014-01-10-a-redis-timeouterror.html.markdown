@@ -1,17 +1,57 @@
 ---
-title: My Middleman Blog Post
-date: 2014-01-01
-tags: blogging, middleman, hello, world
+title: Once upon a time, a REDIS:TIMEOUTERROR
+date: 2014-01-10
+tags: Redis, nosql, AWS, Ruby on Rails
 ---
 
-## Hello World
+<center>
+### ONCE UPON A TIME
+## A REDIS::TIMEOU<font color='red'>TERROR</font>
+</center>
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras eget sem iaculis lorem placerat fringilla. Vestibulum hendrerit dapibus ante et commodo. Donec semper in urna sed tincidunt. Nullam facilisis iaculis volutpat. Donec cursus scelerisque velit, sit amet dictum nunc dapibus quis. Donec auctor consectetur augue. In dignissim lectus at felis auctor, et mollis massa consequat. Mauris egestas odio eget mauris volutpat ultrices. Suspendisse potenti. In ornare eleifend nulla, nec feugiat elit interdum sit amet.
+Once upon a time, I was working on an app allowing more than 100 golf clubs to manage the availabilities of their golf courses. This was a ruby on rails app hosted on AWS.
+
+The clubs had a client application which was pulling continuously on the API of this web app in order to know their availabilities, what they sold and what is still free. This was from a time before webhooks.
+
+The availabilities were pre-calculated and stored in redis in order to avoid to calculate everything each time someone wanted to list availabilities on multiple clubs on multiple days.
+
+On this app, we were using Redis for :
+
+* caching processed information (golf course availabilities)
+* rails cache for views and partials
+* background worker queues (sidekiq)
+
+After the last 200 days of uptime since the last modification, here are some stats from the Redis server :
+
+* 19 billion calls to Redis in 200 days (1070 calls per second average)
+* 4Gb in memory
+* 1.5 million keys actually used for availabilities
+
+## RTFM
+
+Few weeks after using this app in production, we had a lot of Redis::TimeoutError which was the only source of bug we had in the API and the web application. The app was pretty much broken.
+
+Due to a zero budget load test and a lack of reading the Redis documentation, I missed these two parts :
+
+> The use of Redis persistence with EC2 EBS volumes is discouraged since EBS performance is usually poor. Use ephemeral storage to persist and then move your persistence files to EBS when possible.
+
+> Even if you have persistence disabled, Redis will need to perform RDB saves if you use replication.
+
+The backup and the replication we had setup were dumping the full data set on disk regularly, triggering a lot of I/O which were avidly stolen by the EC2 hypervisor and slowing heavily the Redis server. Most of the requests were going in timeout when this was happening.
+
+The solution was to stop doing the backup of the Redis DB : all the data in Redis was recalculable with some other data in Postgres. The Redis replication to a slave server was gone too, we just made sure that we would recalculate everything if the things were going wrong.
+
+See the app response time and error rate after the change (vertical bar):
+![Removing Redis from EBS](images/redis_ttl/1-remove-redis-from-EBS.png)
+
+## Splitting the Redis server
+
+After one month of peace on this application, the same exception Redis::TimeoutError popped again.
 
 ```ruby
-def my_cool_method(message)
-  puts message
-end
+# cat config/initializers/redis.rb
+$redis = Redis.new host: 'ec2-xxx...', port: 6379, driver: :hiredis
+$redis_rails_cache = Redis.new host: 'ec2-yyy...', port: 6379, driver: :hiredis
 ```
 
 Vestibulum id felis mi. Vestibulum a erat leo. Morbi euismod orci nunc, sed iaculis nunc volutpat id. Etiam tempor blandit felis in tincidunt. Mauris at consectetur dui. Praesent feugiat, neque et vulputate convallis, nisi nisi tempus libero, et congue augue odio nec tellus. Praesent consequat arcu a facilisis aliquet. Donec et laoreet lectus. Aliquam sollicitudin, nulla mollis posuere feugiat, sem justo pellentesque lorem, commodo scelerisque mauris eros eu eros. Vestibulum eget eleifend diam, fringilla pretium libero. Integer sapien odio, porttitor non dui sed, tincidunt mattis erat. Pellentesque velit erat, porta a volutpat congue, rhoncus consectetur risus. Maecenas dictum venenatis risus, nec gravida purus elementum vitae. Sed gravida tortor sed sapien ultricies, eu iaculis nisl pulvinar.
