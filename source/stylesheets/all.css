@@ -1,10 +1,16 @@
 @charset "utf-8";
 @import "font-awesome.css";
 @import "bootstrap.css";
+@import "syntax.css";
 
 .title {
   text-shadow: 0 2px 0 rgba(0,0,0,0.15);
   color:#fff;
+}
+
+.highlight {
+  background-color: rgba(250,250,250,0.8);
+  padding:1em;
 }
 
 body {
