@@ -1,11 +1,11 @@
 ---
-title: Load testing a facebook application
+title: Load testing a Facebook application
 date: 2013-07-12
-tags: load testing, facebook, jmeter, ruby on rails
+tags: load testing, Facebook, JMeter, Ruby on Rails
 ---
 
 <center>
-# Load testing a facebook application
+# Load testing a Facebook application
 <sup>or how to destroy servers when developers are deploying</sup>
 </center>
 
