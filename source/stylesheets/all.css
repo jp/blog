@@ -19,7 +19,7 @@
 
 body {
   background: #d4d4d4 url("../images/background.png");
-  font-family: sans-serif; }
+  font-family: Open sans, sans-serif; }
 
 .title{
   font-size: 180px;
@@ -34,9 +34,9 @@ body {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
   margin: 0; }
 
-h2 {
-  color: rgba(0, 0, 0, .7);
-  text-shadow: 0 1px 0 rgba(255, 255, 255, .5);  
+h1, h2 {
+  color: rgba(0, 0, 0, .6);
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
 }
 
 aside { margin-left: 20px;}
