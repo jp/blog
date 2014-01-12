@@ -38,6 +38,10 @@ body {
   text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
   margin: 0; }
 
+.nav li {
+  list-style-type: none;
+}
+
 h1, h2 {
   color: rgba(0, 0, 0, .6);
   text-shadow: 0 1px 0 rgba(255, 255, 255, .7);
