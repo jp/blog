@@ -5,6 +5,12 @@
     %meta{content: "IE=edge;chrome=1", "http-equiv" => "X-UA-Compatible"}/
     = stylesheet_link_tag "normalize", "all"
     = javascript_include_tag  "all"
+    %title
+      - if content_for?(:title)
+        = "#{yield_content :title} | #{data.blog[:name]}"
+      - else
+        = "#{data.blog[:title]} | #{data.blog[:name]}"
+
   %body
     .container
       .row
@@ -12,9 +18,9 @@
           .welcome
             %a{href: "/"}
               %i.title.fa.fa-rocket
-              %h1 the middleman blog
+              %h1 #{data.blog[:title]}
             %p.doc
-              = link_to "by Julien Pellet", "https://twitter.com/julienpellet"
+              = link_to "by #{data.blog[:name]}", "https://twitter.com/julienpellet"
           %aside
             %h2 Recent Articles
             %ol
