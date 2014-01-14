@@ -23,7 +23,7 @@ Some services with free tests :
 * [loadimpact.com](http://loadimpact.com)
 * [blazemeter.com](http://blazemeter.com)
 
-Most of the test services available ends to be really expensive while DDOS tools don't fit at all to a proper test plan.
+Most of the test services available can be really expensive while DDOS tools don't fit at all to a proper test plan.
 
 The solution come from the Apache Software Foundation which is diffusing JMeter.
 

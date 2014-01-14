@@ -17,18 +17,18 @@
         .nav.col-md-4
           .welcome
             %a{href: "/"}
-              %i.title.fa.fa-rocket
+              %i.title.fa.fa-rocket.hidden-xs
               %h1 #{data.blog[:title]}
             %p.doc
               = link_to "by #{data.blog[:name]}", "https://twitter.com/julienpellet"
-          %aside
+          %aside.hidden-xs
             %h2 Recent Articles
             %ol
               - blog.articles[0...10].each do |article|
                 %li
                   = link_to article.title, article
                   %span= article.date.strftime('%b %e')
-            .hidden-sm.hidden-xs
+            .hidden-sm
               %h2 Tags
               %ol
                 - blog.tags.each do |tag, articles|
@@ -36,5 +36,6 @@
                     = link_to tag, tag_path(tag)
                     (#{articles.size})
         .col-md-8
+          %hr.visible-xs.visible-sm
           #main{role: "main"}
             ~ yield
