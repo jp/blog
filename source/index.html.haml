@@ -11,11 +11,12 @@ per_page: 10
 - page_articles.each_with_index do |article, i|
   %h2
     = link_to article.title, article
-    %span= article.date.strftime('%b %e')
+  .date= article.date.strftime('%e %b %Y')
   /
     use article.summary(250) if you have Nokogiri available to show just
     the first 250 characters
-  = article.body
+  = article.summary
+  %hr
 - if paginate
   - if next_page
     %p= link_to 'Next page', next_page
