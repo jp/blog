@@ -4,6 +4,10 @@ date: 2013-07-12
 tags: load testing, Facebook, JMeter, Ruby on Rails
 ---
 
+Creating hundreds of Facebook test users, creating random groups of test users, injecting them in JMeter and hammering the servers with them, that's what it is about.
+
+READMORE
+
 <center>
 # Load testing a Facebook application
 <sup>or how to destroy servers when developers are deploying</sup>

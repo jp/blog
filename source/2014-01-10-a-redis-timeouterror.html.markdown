@@ -4,7 +4,7 @@ date: 2014-01-10
 tags: Redis, nosql, AWS, Ruby on Rails
 ---
 
-This is the story about three issues I encounter with Redis on a high traffic application, each time gradually degrading the performances until Redis and the app were not usable anymore.
+This is the story about three issues I encountered with Redis on a high traffic application, each time gradually degrading the performances until Redis and the app were not usable anymore.
 
 READMORE
 
