@@ -6,8 +6,10 @@ tags: Redis, nosql, AWS, Ruby on Rails
 
 <center>
 ### ONCE UPON A TIME
-## A REDIS::TIMEOU<font color='red'>TERROR</font>
+# A REDIS::TIMEOU<font color='red'>TERROR</font>
 </center>
+
+This is the story about three issues I encounter with Redis, gradually degrading the performances until Redis and the app were not usable anymore.
 
 Once upon a time, I was working on an app allowing more than 100 golf clubs to manage the availabilities of their golf courses. This was a ruby on rails app hosted on AWS.
 
