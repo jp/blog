@@ -34,6 +34,7 @@ body {
 
 .title{
   font-size: 180px;
+  text-decoration: none;
 }
 
 .nav h1 {
@@ -75,6 +76,8 @@ aside { margin-left: 20px;}
     color: rgba(0, 0, 0, 0.3); }
     .doc a:hover {
       color: #666; }
+
+.welcome a {text-decoration: none;}
 
 .welcome {
   text-align: center;
