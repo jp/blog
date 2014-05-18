@@ -88,7 +88,7 @@ The home-made cookbook is here to use the LWRP of the sysctl cookbook, there are
       notifies :run, 'ruby_block[save-sysctl-params]', :delayed
     end
 
-## add cookbooks to the node's run list
+## Add the cookbooks to the node's run list
 
 Now all your cookbooks are on the Chef server. You can add them to you node's run list :
 
