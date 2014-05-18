@@ -1,7 +1,7 @@
 ---
-title: A simple Chef and Berkshelf tutorial
+title: A simple Chef, Chef server and Berkshelf tutorial
 date: 2014-05-18
-tags: Chef, Berkshelf, Vagrant, IPv6, cookbook, knife
+tags: Chef, chef-server, Berkshelf, Vagrant, IPv6, cookbook, knife
 ---
 
 This is a simple tutorial explaining how to manage a Chef server and a node on two vagrant machines, using Berkshelf to manage an external cookbook with it's LWRP on the side.
@@ -11,7 +11,7 @@ This was used as the default setup for a cluster where it is advised to disable 
 READMORE
 
 <center>
-# Chef, Berkshelf and a simple sysctl cookbook on Vagrant machines.
+# Chef-server, Berkshelf and a simple sysctl cookbook on Vagrant machines.
 </center>
 
 ## Get the tutorial's kitchen repository
