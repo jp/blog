@@ -47,7 +47,7 @@ Or shorter :
 
     curl -L https://www.opscode.com/chef/install.sh | sudo bash
 
-Note : ```gem install chef``` might be enough on your workstation.
+Note : "gem install chef" might be enough on your workstation.
 
 ## Get credentials from the chef server to setup the workstation
 
@@ -69,9 +69,9 @@ Your node should now be registered in your chef server. You can request the node
 
 ## Upload the cookbooks and the roles to the chef server
 
-Berkshelf is here to help managing the external cookbooks. The only external cookbook used here is ![onehealth-cookbooks/sysct](https://github.com/onehealth-cookbooks/sysctl) It is here to manage the sysctl configuration of the server.
+Berkshelf is here to help managing the external cookbooks. The only external cookbook used here is [onehealth-cookbooks/sysct](https://github.com/onehealth-cookbooks/sysctl) It is here to manage the sysctl configuration of the server.
 
-Note: during this process, I encountered ![this error](https://github.com/berkshelf/berkshelf/issues/11443) and as it is suggested in one comment, adding an entry in your /etc/hosts helps Berkshelf to connect to the Chef server. You might need to add ```192.168.20.10 chef``` in your /etc/hosts
+Note: during this process, I encountered [this error](https://github.com/berkshelf/berkshelf/issues/11443) and as it is suggested in one comment, adding an entry in your /etc/hosts helps Berkshelf to connect to the Chef server. You might need to add "192.168.20.10 chef" in your /etc/hosts file.
 
     gem install berkshelf
     berks install
@@ -80,7 +80,7 @@ Note: during this process, I encountered ![this error](https://github.com/berksh
 
 ## What's the home-made cookbook 'base_setup' ?
 
-The home-made cookbook is here to use the LWRP of the sysctl cookbook, there are juste a ![few commands](https://github.com/jp/chef-kitchen-tutorial/blob/master/cookbooks/base_setup/recipes/default.rb) in it in order to setup the system :
+The home-made cookbook is here to use the LWRP of the sysctl cookbook, there are juste a [few commands](https://github.com/jp/chef-kitchen-tutorial/blob/master/cookbooks/base_setup/recipes/default.rb) in it in order to setup the system :
 
     # disable IPv6
     sysctl_param 'net.ipv6.conf.all.disable_ipv6' do
@@ -96,7 +96,7 @@ Now all your cookbooks are on the Chef server. You can add them to you node's ru
 
 ## Run the cookbooks on the node
 
-To process the run list on the node, you need to run the ```chef-client``` command as root. You can do this through ssh :
+To process the run list on the node, you need to run the chef-client command as root. You can do this through ssh :
 
     ssh root@192.168.20.12 chef-client
 
