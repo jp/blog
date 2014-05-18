@@ -1,7 +1,7 @@
 ---
 title: A simple Chef and Berkshelf tutorial
 date: 2014-05-18
-tags: Redis, nosql, AWS, Ruby on Rails
+tags: Chef, Berkshelf, Vagrant, IPv6, cookbook, knife
 ---
 
 This is a simple tutorial explaining how to manage a Chef server and a node on two vagrant machines, using Berkshelf to manage an external cookbook with it's LWRP on the side.
